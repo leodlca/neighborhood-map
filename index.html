@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>VanCity Map</title>
+    <script src="js/jquery-3.2.0.min.js"></script>
+    <script src="js/knockout-3.4.2.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header class="col-xs-12">
+            <button class="col-xs-3 btn btn-default button visible-xs visible-sm" type="submit" id="menu-btn" data-bind="click: view.displayMenuFunc">
+				<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+			</button>
+            <h2 id="title" class="col-xs-9 col-md-12">VanCity Map</h2>
+        </header>
+
+        <nav class="col-xs-12 col-md-3 hidden-sm hidden-xs" id="navbar">
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active">
+                    <input type="text" class="form-control" placeholder="Search for a Marker" data-bind="textInput: query">
+                </li>
+                <!-- ko foreach: toDisplay -->
+                <li class="clickable">
+                    <a data-bind="text: title, click: function(){setMapCenter(position, id)}"></a>
+                </li>
+                <!-- /ko -->
+            </ul>
+        </nav>
+
+        <main class="col-xs-12 col-md-9" id="map" ">
+		</main>
+
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBv76HPhWqgzS8O4OpQv3BnXjyucJS8tWk&callback=loadMapsAPI ">
+		</script>    
+
+		<script>
+
+			// These functions load model, view and viewmodel scripts
+			// after google maps api is loaded asynchronously, because
+			// loadMapsAPI is the Google Maps API callback
+
+			var loaded = false;
+
+			function addScript( url, callback ) {
+			    var script = document.createElement( 'script' );
+			    if( callback ) script.onload = callback;
+			    script.type = 'text/javascript';
+			    script.src = url;
+			    document.body.appendChild( script );  
+			}
+
+			function loadMapsAPI() {
+				loaded = true;
+			    addScript( 'js/model.js' );
+			    addScript( 'js/view.js' );
+			    addScript( 'js/viewmodel.js' );
+			}
+
+			// Shows a message if the google maps API does not load after
+			// 6 seconds
+
+			setTimeout(function(){
+				if (!loaded){
+					alert("Something bad happened, Google Maps API did not load properly ");
+				}
+			},6000);
+
+		</script>
+		
+	</div>
+
+</body>
+</html>

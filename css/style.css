@@ -1,0 +1,57 @@
+/*   Page (General) Section   */
+
+html, body, .container {
+	height: 100%;
+}
+
+.container {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+/*   Header and Nav Section   */
+
+header {
+	margin-bottom: 10px;
+	padding-bottom: 0.5%;
+}
+
+nav {
+	margin-bottom: 2%;
+}
+
+.button {
+	width: 45px;
+	margin-top: 21px;
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+#title {
+	text-align: center;
+}
+
+/*     Map and Media Query Section   */
+
+#map {
+	height: 85%;
+	width: 95%;
+	margin-left: 2.5%;
+	margin-right: 2.5%;
+}
+
+@media screen and (min-width: 992px) {
+	header {
+		border-bottom: 1px solid grey;
+	}
+
+	#map {
+		width: 72%;
+		margin-left: 1.5%;
+		margin-right: 1.5%;
+		height: 85%;
+	}
+}
