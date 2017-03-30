@@ -1,6 +1,6 @@
 var view = {
 
-	// This function 
+	// Display/hide menu
 
     displayMenuFunc: function() {
         var navbar = $("#navbar");

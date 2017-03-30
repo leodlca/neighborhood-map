@@ -3,8 +3,6 @@
 
 <head>
     <title>VanCity Map</title>
-    <script src="js/jquery-3.2.0.min.js"></script>
-    <script src="js/knockout-3.4.2.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
@@ -28,51 +26,23 @@
                 </li>
                 <!-- ko foreach: toDisplay -->
                 <li class="clickable">
-                    <a data-bind="text: title, click: function(){setMapCenter(position, id)}"></a>
+                    <a data-bind="text: title, click: function(){setMapCenter(id)}"></a>
                 </li>
                 <!-- /ko -->
             </ul>
         </nav>
 
-        <main class="col-xs-12 col-md-9" id="map" ">
+        <main class="col-xs-12 col-md-9" id="map">
 		</main>
 
-		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBv76HPhWqgzS8O4OpQv3BnXjyucJS8tWk&callback=loadMapsAPI ">
-		</script>    
-
-		<script>
-
-			// These functions load model, view and viewmodel scripts
-			// after google maps api is loaded asynchronously, because
-			// loadMapsAPI is the Google Maps API callback
-
-			var loaded = false;
-
-			function addScript( url, callback ) {
-			    var script = document.createElement( 'script' );
-			    if( callback ) script.onload = callback;
-			    script.type = 'text/javascript';
-			    script.src = url;
-			    document.body.appendChild( script );  
-			}
-
-			function loadMapsAPI() {
-				loaded = true;
-			    addScript( 'js/model.js' );
-			    addScript( 'js/view.js' );
-			    addScript( 'js/viewmodel.js' );
-			}
-
-			// Shows a message if the google maps API does not load after
-			// 6 seconds
-
-			setTimeout(function(){
-				if (!loaded){
-					alert("Something bad happened, Google Maps API did not load properly ");
-				}
-			},6000);
-
-		</script>
+		<script src="js/jquery-3.2.0.min.js"></script>
+    	<script src="js/knockout-3.4.2.js"></script>
+    	<script src="js/resources.js"></script>
+    	<script src="js/model.js"></script>
+    	<script src="js/view.js"></script>
+    	<script src="js/viewmodel.js"></script>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBv76HPhWqgzS8O4OpQv3BnXjyucJS8tWk&callback=initMap"
+		onerror="mapsAPIFailed()"></script>
 		
 	</div>
 

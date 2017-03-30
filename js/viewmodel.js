@@ -1,6 +1,9 @@
-// initMap starts the Map, loads the markers and the infowindows
 
-var initMap = function() {
+var globalMap;
+
+// loadMap starts the Map, loads the markers and the infowindows
+
+var loadMap = function() {
 
     var self = this;
 
@@ -42,10 +45,6 @@ var initMap = function() {
     }
 
     markerArray.forEach(function(item) {
-
-        // Load the marker on the map
-
-        item.setMap(self.map);
 
         // Transform the marker title into a string readable by Wikipedia query
         // and create an empty infowindow
@@ -128,7 +127,7 @@ var initMap = function() {
                 current.setAnimation(google.maps.Animation.BOUNCE);
                 setTimeout(function() {
                     current.setAnimation(null);
-                }, 3000);
+                }, 1400);
             }
 
             // Set the current infowindow to be the view.prevInfoWindow, after the last
@@ -141,12 +140,24 @@ var initMap = function() {
 
     });
 
+    // Make sure viewModel is loaded after Google Maps API finished loading.
+
+    ko.applyBindings(viewModel);
+
+    // Displays all the markers
+
+    setMapOnAll(view.markerArray(), self.map);
+
+    return map;
+
 };
 
-// Creates a new object of the initMap function, everything will be done using
-// the "theMap" object
+// initMap is the callback function of googleMap API and assigns globalMap
+// to the map object produced by loadMap, so it can be used by other functions.
 
-var theMap = new initMap();
+function initMap() {
+    globalMap = loadMap();
+}
 
 var viewModel = function() {
 
@@ -158,13 +169,7 @@ var viewModel = function() {
         });
     };
 
-    setMapCenter = function(latlng, id) {
-
-        // This function is called when the user clicks a marker of the list, so it makes
-        // the marker to be the new center of the map.
-
-        theMap.map.setZoom(15);
-        theMap.map.setCenter(latlng);
+    setMapCenter = function(id) {
 
         // Mousedown is being used instead of click so it guarantees the best
         // UX on mobiles
@@ -176,7 +181,7 @@ var viewModel = function() {
 
     toDisplay = ko.observableArray(view.markerArray());
 
-    toHide = ko.observableArray();
+    toHide = ko.observableArray([]);
 
     search = ko.computed(function() {
 
@@ -186,7 +191,7 @@ var viewModel = function() {
 
         var query = self.query().toLowerCase();
 
-        if (query !== "") {
+        if (query !== '') {
 
             // When query is not empty, the toDisplay Array is wiped
 
@@ -197,6 +202,7 @@ var viewModel = function() {
             for (var i = 0; i < view.markerArray().length; i++) {
                 if (view.markerArray()[i].title.toLowerCase().indexOf(query) >= 0) {
                     self.toDisplay.push(view.markerArray()[i]);
+                    self.setMapOnAll(self.toDisplay(), globalMap);
                 } else {
 
                     // If the marker does not match the query, it is pushed to toHide
@@ -208,6 +214,7 @@ var viewModel = function() {
             // And then every marker on toHide is hidden from the map.
 
             self.setMapOnAll(self.toHide(), null);
+            self.toHide([]);
 
         } else {
 
@@ -216,11 +223,9 @@ var viewModel = function() {
 
             self.toHide([]);
             self.toDisplay(view.markerArray());
-            self.setMapOnAll(self.toDisplay(), theMap.map);
+            self.setMapOnAll(self.toDisplay(), globalMap);
         }
 
     });
 
 };
-
-ko.applyBindings(viewModel);
